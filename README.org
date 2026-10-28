@@ -6,11 +6,7 @@
 #+texinfo_dir_title: Corfu: (corfu).
 #+texinfo_dir_desc: COmpletion in Region FUnction
 
-#+html: <a href="https://www.gnu.org/software/emacs/"><img alt="GNU Emacs" src="https://github.com/minad/corfu/blob/screenshots/emacs.svg?raw=true"/></a>
-#+html: <a href="https://elpa.gnu.org/packages/corfu.html"><img alt="GNU ELPA" src="https://elpa.gnu.org/packages/corfu.svg"/></a>
-#+html: <a href="https://elpa.gnu.org/devel/corfu.html"><img alt="GNU-devel ELPA" src="https://elpa.gnu.org/devel/corfu.svg"/></a>
-#+html: <a href="https://releases.melpa.org/#/corfu"><img alt="MELPA Releases" src="https://releases.melpa.org/packages/corfu-badge.svg"/></a>
-#+html: <a href="https://snapshots.melpa.org/#/corfu"><img alt="MELPA Snapshots" src="https://snapshots.melpa.org/packages/corfu-badge.svg"/></a>
+**This is a reduced version of the corfu. You do not want to use this.**
 
 Corfu enhances in-buffer completion with a small completion popup. The current
 candidates are shown in a popup below or above the point, and can be selected by
@@ -28,42 +24,28 @@ backends. The Emacs built-in Capfs and the Capfs provided by third-party
 programming language packages are often sufficient. Additional Capfs and
 completion utilities are provided by the separate [[https://github.com/minad/cape][Cape]] package.
 
-*NOTE*: Corfu relies on child frames to show the popup. On Emacs 31 this works for
-terminal Emacs. Use the [[https://codeberg.org/akib/emacs-corfu-terminal][corfu-terminal]] package on older Emacs versions.
-
-#+html: <img src="https://github.com/minad/corfu/blob/screenshots/light.png?raw=true">
-
-#+html: <img src="https://github.com/minad/corfu/blob/screenshots/dark.png?raw=true">
-
-#+html: <img src="https://github.com/minad/corfu/blob/screenshots/popupinfo-light.png?raw=true">
-
-#+html: <img src="https://github.com/minad/corfu/blob/screenshots/popupinfo-dark.png?raw=true">
+*NOTE*: Corfu relies on child frames to show the popup. In terminal Emacs this
+requires Emacs 31.
 
 #+toc: headlines 8
 
 * Features
 
-- Auto-completion with timer or character trigger (/off/ by default).
+- Auto-completion with timer (/off/ by default).
 - Popup display with scrollbar indicator and arrow key navigation.
 - The popup can be summoned explicitly by pressing =TAB= at any time.
 - The current candidate is inserted with =TAB= and selected with =RET=.
-- Sorting by prefix, string length and alphabetically, optionally by history.
+- Sorting by prefix, string length and alphabetically.
 - The selected candidate is previewed (configurable via ~corfu-preview-current~).
 - The selected candidate is automatically committed on further input by default.
   (configurable via ~corfu-preview-current~).
-- Supports the [[https://github.com/oantolin/orderless][Orderless]] completion style. The filter string can contain
-  arbitrary characters, after inserting a space via =M-SPC= (configurable via
-  ~corfu-quit-at-boundary~ and ~corfu-separator~).
 - Lazy candidate highlighting for performance.
 - Support for candidate annotations (=annotation-function=, =affixation-function=).
 - Deprecated candidates are displayed as crossed out.
-- Icons are provided by external packages via margin formatter functions.
-- Rich set of extensions: Quick keys, index keys, sorting by history,
-  documentation in echo area, popup or separate buffer.
+- Candidate documentation and location in a separate buffer.
 
 * Installation
 
-Corfu is available from [[https://elpa.gnu.org/packages/corfu.html][ELPA]] or [[https://releases.melpa.org/#/corfu][MELPA]] and can be installed via =M-x package-install RET corfu RET=.
 After installation, activate the global minor mode with =M-x global-corfu-mode
 RET=. For completion press =M-TAB= (or =TAB=) within a buffer. Auto completion is
 disabled by default for safety and unobtrusiveness.
@@ -89,7 +71,6 @@ bindings:
 | =RET=                      | ~corfu-insert~             |
 | =M-g=                      | ~corfu-info-location~      |
 | =M-h=                      | ~corfu-info-documentation~ |
-| =M-SPC=                    | ~corfu-insert-separator~   |
 | =C-g=                      | ~corfu-quit~               |
 | ~keyboard-escape-quit~     | ~corfu-reset~              |
 
@@ -115,11 +96,8 @@ Here is an example configuration:
   ;; Optional customizations
   ;; :custom
   ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
   ;; (corfu-preview-current nil)    ;; Disable current candidate preview
   ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
-  ;; (corfu-on-exact-match 'insert) ;; Configure handling of exact matches
 
   ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
   ;; :hook ((prog-mode . corfu-mode)
@@ -131,20 +109,11 @@ Here is an example configuration:
   ;; Recommended: Enable Corfu globally.  Recommended since many modes provide
   ;; Capfs and Dabbrev can be used globally (M-/).  See also the customization
   ;; variable `global-corfu-modes' to exclude certain modes.
-  (global-corfu-mode)
-
-  ;; Enable optional extension modes:
-  ;; (corfu-history-mode)
-  ;; (corfu-mouse-mode)
-  ;; (corfu-popupinfo-mode)
-  )
+  (global-corfu-mode))
 
 ;; A few more useful configurations...
 (use-package emacs
   :custom
-  ;; TAB cycle if there are only few candidates
-  ;; (completion-cycle-threshold 3)
-
   ;; Enable indentation+completion using the TAB key.
   ;; `completion-at-point' is often bound to M-TAB.
   (tab-always-indent 'complete)
@@ -204,11 +173,6 @@ correctly. Additionally enable =partial-completion= for file path expansion.
 opened at once with =find-file= if you enter a wildcard. You may also give the
 =initials= completion style a try.
 
-See also the [[https://github.com/minad/corfu/wiki][Corfu Wiki]] and the [[https://github.com/minad/cape][Cape manual]] for additional Capf configuration
-tips. For more general documentation read the chapter about completion in the
-[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Completion.html][Emacs manual]]. If you want to create your own Capfs, you can find documentation
-about completion in the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Completion.html][Elisp manual]].
-
 ** Auto completion
 
 Auto completion is disabled by default for safety and unobtrusiveness. Note that
@@ -216,15 +180,10 @@ completion can be vulnerable to arbitrary code execution. Auto completion can be
 enabled by setting ~corfu-auto~ to t. Only enable auto completion locally in
 trusted buffers or globally if you edit trusted files only.
 
-You may want to configure Corfu to quit completion eagerly, such that the
-completion popup stays out of your way when it appeared unexpectedly.
-
 #+begin_src emacs-lisp
-;; Enable auto completion, configure delay, trigger and quitting
+;; Enable auto completion and configure delay
 (setq corfu-auto t
-      corfu-auto-delay 0.2
-      corfu-auto-trigger "." ;; Custom trigger characters
-      corfu-quit-no-match 'separator) ;; or t
+      corfu-auto-delay 0.2)
 #+end_src
 
 I suggest to experiment with the various settings and key bindings to find a
@@ -343,17 +302,6 @@ shells like Bash, Zsh or Fish.
                               (corfu-mode)))
 #+end_src
 
-When pressing =RET= while the Corfu popup is visible, the ~corfu-insert~ command
-will be invoked. This command does inserts the currently selected candidate, but
-it does not send the prompt input to Eshell or the Comint process. Therefore you
-often have to press =RET= twice which feels like an unnecessary double
-confirmation. Fortunately it is easy to improve this by using the command
-~corfu-send~ instead.
-
-#+begin_src emacs-lisp
-(keymap-set corfu-map "RET" #'corfu-send)
-#+end_src
-
 Shell completion uses the flexible Pcomplete mechanism internally, which allows
 you to program the completions per shell command. If you want to know more, look
 into this [[https://www.masteringemacs.org/article/pcomplete-context-sensitive-completion-emacs][blog post]], which shows how to configure Pcomplete for git commands.
@@ -363,94 +311,26 @@ before Emacs 29, Pcomplete had a few bugs, which had to be worked around using
 the [[https://github.com/minad/cape][Cape]] library (Completion at point extensions). In case you discover any
 remaining Pcomplete issues, please report them upstream.
 
-** Orderless completion
-
-[[https://github.com/oantolin/orderless][Orderless]] is an advanced completion style that supports multi-component search
-filters separated by a configurable character (space, by default). Normally,
-entering characters like space which lie outside the completion region
-boundaries (words, typically) causes Corfu to quit. This behavior is helpful
-with auto-completion, which may pop-up when not desired, e.g. on entering a new
-variable name. Just keep typing and Corfu will get out of the way.
-
-But orderless search terms can contain arbitrary characters; they are also
-interpreted as regular expressions. To use orderless, set ~corfu-separator~ (a
-space, by default) to the primary character of your orderless component
-separator.
-
-Then, when a new orderless component is desired, use =M-SPC=
-(~corfu-insert-separator~) to enter the first component separator in the input,
-and arbitrary orderless search terms and new separators can be entered
-thereafter.
-
-To treat the entire input as Orderless input, you can set the customization
-option ~corfu-quit-at-boundary~ to nil. This disables the predicate which checks
-if the current completion boundary has been left. In contrast, if you always
-want to quit at the boundary, set ~corfu-quit-at-boundary~ to t. By default
-~corfu-quit-at-boundary~ is set to ~separator~ which quits at completion boundaries
-as long as no separator has been inserted with ~corfu-insert-separator~.
-
-Finally, there exists the user option ~corfu-quit-no-match~ which is set to
-=separator= by default. With this setting Corfu stays alive as soon as you start
-advanced filtering with a ~corfu-separator~ even if there are no matches, for
-example due to a typo. As long as no separator character has been inserted with
-~corfu-insert-separator~, Corfu will still quit if there are no matches. This
-ensures that the Corfu popup goes away quickly if completion is not possible.
-
-In the following we show two configurations, one which works best with auto
-completion and one which may work better with manual completion if you prefer to
-always use =SPC= to separate the Orderless components.
-
- #+begin_src emacs-lisp
-;; Auto completion example
-(use-package corfu
-  :custom
-  (corfu-auto t)          ;; Enable auto completion
-  ;; (corfu-separator ?_) ;; Set to orderless separator, if not using space
-  :bind
-  ;; Another key binding can be used, such as S-SPC.
-  ;; (:map corfu-map ("M-SPC" . corfu-insert-separator))
-  :init
-  (global-corfu-mode))
-
-;; Manual completion example
-(use-package corfu
-  :custom
-  ;; (corfu-separator ?_) ;; Set to orderless separator, if not using space
-  :bind
-  ;; Configure SPC for separator insertion
-  (:map corfu-map ("SPC" . corfu-insert-separator))
-  :init
-  (global-corfu-mode))
-#+end_src
-
 ** TAB-only completion
 
 By default, Corfu steals both the ~RET~ and ~TAB~ keys, when the Corfu popup is
 open. This can feel intrusive, in particular in combination with auto
 completion. ~RET~ may accidentally commit an automatically selected candidate,
 while you actually wanted to start a new line. As an alternative we can unbind
-the ~RET~ key completely from ~corfu-map~ or reserve the ~RET~ key only in shell
-modes using a menu-item filter.
+the ~RET~ key completely from ~corfu-map~.
 
 #+begin_src emacs-lisp
 ;; TAB-only configuration
 (use-package corfu
   :custom
-  (corfu-auto t)               ;; Enable auto completion
-  (corfu-preselect 'directory) ;; Select the first candidate, except for directories
+  (corfu-auto t) ;; Enable auto completion
 
   :init
   (global-corfu-mode)
 
   :config
   ;; Free the RET key for less intrusive behavior.
-  ;; Option 1: Unbind RET completely
-  ;; (keymap-unset corfu-map "RET")
-  ;; Option 2: Use RET only in shell modes
-  (keymap-set corfu-map "RET" `( menu-item "" nil :filter
-                                 ,(lambda (&optional _)
-                                    (and (derived-mode-p 'eshell-mode 'comint-mode)
-                                         #'corfu-send)))))
+  (keymap-unset corfu-map "RET"))
 #+end_src
 
 ** TAB-and-Go completion
@@ -506,33 +386,6 @@ The command ~corfu-move-to-minibuffer~ is defined here in terms of
 (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)
 #+end_src
 
-* Extensions
-:properties:
-:custom_id: extensions
-:end:
-
-We maintain small extension packages to Corfu in this repository in the
-subdirectory [[https://github.com/minad/corfu/tree/main/extensions][extensions/]]. The extensions are installed together with Corfu. The
-extensions are inactive by default and can be enabled manually if desired.
-Furthermore it is possible to install each of the files individually, ~corfu.el~
-and the ~corfu-*.el~ extensions. Currently the following extensions come with the
-Corfu package:
-
-- [[https://github.com/minad/corfu/blob/main/extensions/corfu-auto.el][corfu-auto]]: Auto completion is enabled if =corfu-auto= is set to =t=.
-- [[https://github.com/minad/corfu/blob/main/extensions/corfu-echo.el][corfu-echo]]: =corfu-echo-mode= displays a brief candidate documentation in the
-  echo area.
-- [[https://github.com/minad/corfu/blob/main/extensions/corfu-history.el][corfu-history]]: =corfu-history-mode= remembers selected candidates and sorts the
-  candidates by their history position and frequency.
-- [[https://github.com/minad/corfu/blob/main/extensions/corfu-indexed.el][corfu-indexed]]: =corfu-indexed-mode= allows you to select indexed candidates with
-  prefix arguments.
-- [[https://github.com/minad/corfu/blob/main/extensions/corfu-info.el][corfu-info]]: Actions to access the candidate location and documentation.
-- [[https://github.com/minad/corfu/blob/main/extensions/corfu-mouse.el][corfu-mouse]]: =corfu-mouse-mode= enables mouse support.
-- [[https://github.com/minad/corfu/blob/main/extensions/corfu-popupinfo.el][corfu-popupinfo]]: Display candidate documentation or source in a popup next to
-  the candidate menu.
-- [[https://github.com/minad/corfu/blob/main/extensions/corfu-quick.el][corfu-quick]]: Commands to select using Avy-style quick keys.
-
-See the Commentary of those files for configuration details.
-
 * Complementary packages
 
 Corfu works well together with all packages providing code completion via the
@@ -544,22 +397,13 @@ enhance your setup.
   with a visual indication of whether there are many or exactly one candidate
   available (works only with =corfu-auto= disabled).
 
-- [[https://codeberg.org/akib/emacs-corfu-terminal][corfu-terminal]]: Child frames are supported by terminal Emacs 31 out of the
-  box. On older Emacs versions, this package provides an overlay-based popup.
-
 - [[https://github.com/oantolin/orderless][Orderless]]: Corfu supports completion styles, including the advanced =orderless=
-  completion style, where the filter expressions are separated by spaces or
-  another character (see ~corfu-separator~).
+  completion style.
 
 - [[https://github.com/minad/cape][Cape]]: Provides additional Capf backends and =completion-in-region= commands.
   Among others, the package supplies the file completion backend =cape-file= and
   the Dabbrev backend =cape-dabbrev=. Cape provides the ~cape-company-to-capf~
   adapter to reuse Company backends in Corfu.
-
-- [[https://github.com/jdtsmith/kind-icon][kind-icon]], [[https://github.com/LuigiPiucco/nerd-icons-corfu][nerd-icons-corfu]]: Icons are supported by Corfu via external
-  packages. The nerd-icons-corfu package relies on the Nerd icon font, which is
-  supported on terminal, while kind-icon uses SVGs from monochromatic icon
-  sets, or colored-coded text badges for terminal or simpler appearance.
 
 - [[https://github.com/minad/tempel][Tempel]]: Tiny template/snippet package with templates in Lisp syntax, which
   can be used in conjunction with Corfu.
